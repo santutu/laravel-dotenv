@@ -16,10 +16,10 @@ composer require santutu/laravel-dotenv
 \DotEnv::delete('APP_NAME');
 ```
 
-```bash
+```php
 php artisan env:set APP_NAME MY_APP_NAME 
 php artisan env:get APP_NAME //MY_APP_NAME 
-php artisan env:delete APP_NAME
+php artisan env:delete APP_NAME //APP_NAME=MY_APP_NAME
 ```
 
 #### Load another .env

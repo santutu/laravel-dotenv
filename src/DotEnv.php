@@ -64,7 +64,7 @@ class DotEnv
         return false;
     }
 
-    public function delete(string $key): bool
+    public function delete(string $key): ?string
     {
         $contents = file_get_contents($this->dotEnvFilePath);
         $matches = $this->getMatches($contents, $key);
@@ -72,9 +72,9 @@ class DotEnv
         if (count($matches)) {
             $contents = str_replace($matches[0], "", $contents);
             $this->writeFile($this->dotEnvFilePath, $contents);
-            return true;
+            return $matches[0];
         }
-        return false;
+        return null;
     }
 
     public function copy(string $path = '.env.example', string $target = '.env')

@@ -52,7 +52,8 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         $this->assertEquals('', $dotEnv->get('TEST'));
 
         //can delete
-        $dotEnv->delete('TEST');
+        $this->assertEquals("TEST=", $dotEnv->delete('TEST'));;
+        $this->assertEquals(null, $dotEnv->delete('TEST'));;
         $this->assertNull($dotEnv->get('TEST'));
 
         if (file_exists($dotEnvFilePath)) {
@@ -78,7 +79,7 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         Artisan::call('env:get TEST TEST_T', [], new ConsoleOutput());
 
         //artisan delete
-        Artisan::call('env:delete TEST TEST_T');
+        Artisan::call('env:delete TEST TEST_T', [], new ConsoleOutput());
         $this->assertNull($dotEnv->get('TEST'));
         $this->assertNull($dotEnv->get('TEST_T'));
 
