@@ -3,7 +3,7 @@
 ### Installation
 
 ```bash
-composer requred santutu/laravel-dotenv
+composer require santutu/laravel-dotenv
 ```
 
 ### Default Ussage.
