@@ -15,7 +15,7 @@ class SetDotEnvCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'env:set {key} {value?}';
+    protected $signature = 'env:set {key} {value?} {--env=}';
 
     /**
      * The console command description.
@@ -42,7 +42,8 @@ class SetDotEnvCommand extends Command
     public function handle()
     {
         $dotEnv = resolve(DotEnv::class);
-        $dotEnv->setDotEnvFile(app()->environmentFilePath());
+        $dotEnvPath = $this->option('env') ?? app()->environmentFilePath();
+        $dotEnv->setDotEnvFile($dotEnvPath);
 
         [$key, $value] = $this->getKeyValue();
         if ($dotEnv->set($key, $value)) {

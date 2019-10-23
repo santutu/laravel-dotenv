@@ -17,10 +17,16 @@ composer require santutu/laravel-dotenv
 ```
 
 ```php
-php artisan env:set APP_NAME MY_APP_NAME 
+php artisan env:set APP_NAME MY_APP_NAME  //default is .env
 php artisan env:get APP_NAME //MY_APP_NAME 
 php artisan env:delete APP_NAME //APP_NAME=MY_APP_NAME
+
+php artisan env:set APP_NAME MY_APP_NAME --env=.env.prod
+php artisan env:get APP_NAME --env=.env.prod //MY_APP_NAME 
+php artisan env:delete APP_NAME --env=.env.prod //APP_NAME=MY_APP_NAME
 ```
+
+
 
 #### Load another .env
 

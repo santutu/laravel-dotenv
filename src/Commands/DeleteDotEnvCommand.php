@@ -14,7 +14,7 @@ class DeleteDotEnvCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'env:delete {key*}';
+    protected $signature = 'env:delete {key*} {--env=}';
 
     /**
      * The console command description.
@@ -41,7 +41,9 @@ class DeleteDotEnvCommand extends Command
     public function handle()
     {
         $dotEnv = resolve(DotEnv::class);
-        $dotEnv->setDotEnvFile(app()->environmentFilePath());
+        $dotEnvPath = $this->option('env') ?? app()->environmentFilePath();
+        $dotEnv->setDotEnvFile($dotEnvPath);
+
 
         $keys = $this->argument('key');
         foreach ($keys as $key) {
