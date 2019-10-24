@@ -26,6 +26,7 @@ __Instance__
 $dotEnv= (new DotEnv('.env'))->copy('.env.example')) // copy .env.example->.env. if already exist, backup to .env.temp
 $dotEnv->copy('.env.prod') // copy .env.prod -> .env. if already exist, backup to .env.temp
 $dotEnv->load('.env.dev') //load .env.dev. if not exist, create empty file.
+
 $dotEnv->set('APP_NAME', 'name')
 $dotEnv->get('APP_NAME') //name
 $dotEnv->delete('APP_NAME')
@@ -48,12 +49,12 @@ php artisan env:get APP_NAME //MY_APP_NAME
 php artisan env:delete APP_NAME //APP_NAME=MY_APP_NAME
 ```
 
-#### Can set another .env file with --env argument in console 
+#### Can set another file with --env argument in console 
 
 ```php
 php artisan env:set APP_NAME MY_APP_NAME --env=.env.prod
 php artisan env:get APP_NAME --env=.env.prod //MY_APP_NAME 
-php artisan env:delete APP_NAME --env=.env.prod //APP_NAME=MY_APP_NAME
+php artisan env:delete APP_NAME --env=.env.prod
 ```
 
 Also you can alias like --env=prod 
