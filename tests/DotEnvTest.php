@@ -93,8 +93,8 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         }
         $dotEnv->copy('.env.example', $dotEnvFilePath);
         $dotEnv->copy('.env.example', $dotEnvFilePath);
-        $this->assertEquals(Path::getDirectory($dotEnvFilePath),Path::getDirectory($dotEnv->dotEnvFilePath));
-        $this->assertEquals(Path::getFilename($dotEnvFilePath),Path::getFilename($dotEnv->dotEnvFilePath));
+        $this->assertEquals(Path::getDirectory($dotEnvFilePath), Path::getDirectory($dotEnv->dotEnvFilePath));
+        $this->assertEquals(Path::getFilename($dotEnvFilePath), Path::getFilename($dotEnv->dotEnvFilePath));
         $this->assertTrue(file_exists($dotEnvFilePath));
 
         //artisan set
@@ -119,7 +119,7 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
 
         //
         Artisan::call('env:set TEST value55 --env=.env.test', []);
-        $dotEnv->setDotEnvFile('.env.test');
+        $dotEnv->load('.env.test');
         $this->assertEquals('value55', $dotEnv->get('TEST'));
 
         Artisan::call('env:get TEST --env=.env.test', [], new ConsoleOutput());
@@ -153,7 +153,12 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         }
 
         //default
-        $this->assertEquals('zxc',$dotEnv->get('ASD', 'zxc'));
+        $this->assertEquals('zxc', $dotEnv->get('ASD', 'zxc'));
+
+        //copy by dotEnv
+        $prodDotEnv->set('TEST', 'Asd');
+        $dotEnv->copyByDotEnv($prodDotEnv);
+        $this->assertEquals($prodDotEnv->get('TEST'), $dotEnv->get('TEST'));
     }
 
     protected function getPackageProviders($app)

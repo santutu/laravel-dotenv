@@ -10,15 +10,28 @@ composer require santutu/laravel-dotenv
 
 #### In Code
 
+__Facade__
 ```php
-\DotEnv::copy('.env.example','.env'); // copy .env.example -> .env. if already exist, backup to .env.temp
-\DotEnv::use('.env.example') // is Equels \DotEnv::copy('.env.example','.env');
+\DotEnv::copy('.env.example','.env'); // Copy .env.example -> .env and load .env. if already exist, backup to .env.temp
+\DotEnv::use('.env.example') // is equels \DotEnv::copy('.env.example','.env');
+\DotEnv::load('.env.example') // Not copy, just load '.env.example'
 
 \DotEnv::set('APP_NAME','MY_APP_NAME');
 \DotEnv::getOldValue(); //Laravel
 \DotEnv::get('APP_NAME'); //MY_APP_NAME
 \DotEnv::delete('APP_NAME');
 ```
+
+__Instance__
+
+```php
+$dotEnv= new DotEnv('.env.dev') //load .env.dev. if not exist, create empty file. 
+$dotEnv= (new DotEnv)->copy('.env.example','.env')) // copy .env.example -> .env. if already exist, backup to .env.temp
+$dotEnv->set('APP_NAME', 'name')
+$dotEnv->get('APP_NAME') //name
+$dotEnv->delete('APP_NAME')
+
+````
 
 #### As alias
 ```php

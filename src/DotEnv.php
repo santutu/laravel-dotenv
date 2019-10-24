@@ -26,12 +26,12 @@ class DotEnv
             if ($this->useAutoPrefix) {
                 $envFilePath = $this->makePrefix($envFilePath);
             }
-            $this->setDotEnvFile($envFilePath);
+            $this->load($envFilePath);
         }
     }
 
 
-    public function setDotEnvFile(string $filePath)
+    public function load(string $filePath)
     {
         if (!file_exists($filePath)) {
             $myfile = fopen($filePath, "w");
@@ -94,7 +94,7 @@ class DotEnv
         return null;
     }
 
-    public function use(string $envFilePath): bool
+    public function use(string $envFilePath): self
     {
         if ($this->useAutoPrefix) {
             $envFilePath = $this->makePrefix($envFilePath);
@@ -103,8 +103,13 @@ class DotEnv
     }
 
 
-    public function copy(string $path = '.env.example', string $target = '.env'): bool
+    public function copy(string $path = '.env.example', ?string $target = null): self
     {
+        if ($target === null) {
+            if ($this->getDotEnvFilePath() === null) throw new \Exception('dot env file path is null');
+            $target = $this->getDotEnvFilePath();
+        }
+
         if ($this->useAutoPrefix) {
             $path = $this->makePrefix($path);
             $target = $this->makePrefix($target);
@@ -114,9 +119,26 @@ class DotEnv
             copy($target, '.env.temp');
         }
 
-        $result = copy($path, $target);
-        $this->setDotEnvFile($target);
-        return $result;
+        copy($path, $target);
+        $this->load($target);
+        return $this;
+    }
+
+    public function copyByDotEnv(DotEnv $source, ?DotEnv $target = null): self
+    {
+        if ($target === null) {
+            $target = $this;
+        }
+        if ($target->getDotEnvFilePath() === null || $source->getDotEnvFilePath() === null) {
+            throw new \Exception('dot env file path is null');
+        }
+        $this->copy($source->getDotEnvFilePath(), $target->getDotEnvFilePath());
+        return $this;
+    }
+
+    public function getDotEnvFilePath()
+    {
+        return $this->dotEnvFilePath;
     }
 
     public function getKey(): string

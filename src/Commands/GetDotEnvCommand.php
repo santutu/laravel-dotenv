@@ -42,7 +42,7 @@ class GetDotEnvCommand extends Command
     {
         $dotEnv = resolve(DotEnv::class);
         $dotEnvPath = $this->option('env') ?? app()->environmentFilePath();
-        $dotEnv->setDotEnvFile($dotEnvPath);
+        $dotEnv->load($dotEnvPath);
 
         $keys = $this->argument('key');
         foreach ($keys as $key) {
