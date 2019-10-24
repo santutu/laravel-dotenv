@@ -8,6 +8,8 @@ composer require santutu/laravel-dotenv
 
 ### Default Ussage.
 
+In Code
+
 ```php
 \DotEnv::copy('.env.example','.env'); // if exist .env, Can be skipped.
 \DotEnv::set('APP_NAME','MY_APP_NAME');
@@ -16,11 +18,17 @@ composer require santutu/laravel-dotenv
 \DotEnv::delete('APP_NAME');
 ```
 
+In Console
+
 ```php
 php artisan env:set APP_NAME MY_APP_NAME  //default is .env
 php artisan env:get APP_NAME //MY_APP_NAME 
 php artisan env:delete APP_NAME //APP_NAME=MY_APP_NAME
+```
 
+Can set another .env file with --env argument in console 
+
+```php
 php artisan env:set APP_NAME MY_APP_NAME --env=.env.prod
 php artisan env:get APP_NAME --env=.env.prod //MY_APP_NAME 
 php artisan env:delete APP_NAME --env=.env.prod //APP_NAME=MY_APP_NAME
@@ -28,14 +36,14 @@ php artisan env:delete APP_NAME --env=.env.prod //APP_NAME=MY_APP_NAME
 
 
 
-#### Load another .env
+#### Load another .env in code
 
 ```php
 $dotEnv= new DotEnv('.env.prod');
 ```
 
 
-#### Create another .env
+#### Create another .env in code
 
 ```php
 $dotEnv= new DotEnv('.env.prod');
