@@ -6,9 +6,8 @@
 composer require santutu/laravel-dotenv
 ```
 
-### Ussage.
+### Usage In Code
 
-#### In Code
 
 __Facade__
 ```php
@@ -40,7 +39,7 @@ $devDotEnv = new DotEnv('dev'); // is equels new DotEnv('.env.dev');
 ```
 
 
-#### In Console
+### Usage In Console
 
 ```php
 php artisan env:copy prod // if exist .env, Can be skipped.
