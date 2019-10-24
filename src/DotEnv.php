@@ -64,7 +64,7 @@ class DotEnv
 
         $this->assertDotEnvFilePath();
 
-        $value = $this->conversionValue($value);
+        $value = $this->convertValue($value);
         $this->key = $key;
         $this->newValue = $value;
 
@@ -206,7 +206,7 @@ class DotEnv
     }
 
 
-    protected function reverseValue(?string $key)
+    public function reverseValue(?string $key)
     {
         if (is_string($key)) {
             $key = $this->stripDoubleQuotes($key);
@@ -218,7 +218,7 @@ class DotEnv
         return $key;
     }
 
-    protected function conversionValue(?string $val)
+    public function convertValue(?string $val)
     {
         if (is_string($val))
             $val = $this->ensureContainSpaceValue($val);
