@@ -7,21 +7,21 @@ namespace Santutu\LaravelDotEnv\Commands;
 use Illuminate\Console\Command;
 use Santutu\LaravelDotEnv\DotEnv;
 
-class GetDotEnvCommand extends Command
+class UseDotEnvCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'env:get {key*} {--env=}';
+    protected $signature = 'env:use {env}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'get value by key';
+    protected $description = 'use .env file';
 
     /**
      * Create a new command instance.
@@ -41,15 +41,17 @@ class GetDotEnvCommand extends Command
     public function handle()
     {
         $dotEnv = resolve(DotEnv::class);
-        $dotEnvPath = $this->option('env') ?? app()->environmentFilePath();
-        $dotEnv->setDotEnvFile($dotEnvPath);
+        $env = $this->argument('env');
 
-        $keys = $this->argument('key');
-        foreach ($keys as $key) {
-            $this->info($dotEnv->get($key));
+        if (file_exists('.env')) {
+            if (!$this->confirm('Already exist .env Do you force this command? (be backup as.env.temp)')) {
+                return false;
+            }
         }
 
+        if ($dotEnv->use($env, true)) {
+            $this->info("use {$env}");
+        }
     }
-
 
 }

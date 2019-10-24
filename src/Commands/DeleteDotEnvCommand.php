@@ -21,7 +21,7 @@ class DeleteDotEnvCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Set .env key value';
+    protected $description = 'Delete .env value by key';
 
     /**
      * Create a new command instance.

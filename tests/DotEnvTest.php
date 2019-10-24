@@ -92,6 +92,7 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         }
         $dotEnv->copy('.env.example', $dotEnvFilePath);
         $dotEnv->copy('.env.example', $dotEnvFilePath);
+        $this->assertEquals($dotEnvFilePath, $dotEnv->dotEnvFilePath);
         $this->assertTrue(file_exists($dotEnvFilePath));
 
         //artisan set
@@ -124,6 +125,33 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         $this->assertEquals(null, $dotEnv->get('TEST'));
 
 
+        //auto prefix
+        $prodDotEnv = new DotEnv('prod');
+        $this->assertEquals('.env.prod', $prodDotEnv->dotEnvFilePath);
+
+        //use
+        $prodDotEnv->set('TEST', 'PROD');
+        $dotEnv->use('prod');
+        $this->assertEquals('PROD', $dotEnv->get('TEST'));
+        $this->assertTrue(file_exists('.env.temp'));
+
+        Artisan::call('env:set TEST null');
+//        Artisan::call('env:use prod');
+//        $this->assertEquals('PROD', $dotEnv->get('TEST'));
+
+        //space
+        $dotEnv->set('TEST', 'TE ST');
+        $this->assertEquals('TE ST', $dotEnv->get('TEST'));
+
+        //escape
+        $letters = ['TE ST\"', 'TEST\"', '\"TEST\"', 'TE \"ST'];
+        foreach ($letters as $letter) {
+            $dotEnv->set('TEST', $letter);
+            $this->assertEquals($letter, $dotEnv->get('TEST'));
+        }
+
+        //default
+        $this->assertEquals('zxc',$dotEnv->get('ASD', 'zxc'));
     }
 
     protected function getPackageProviders($app)

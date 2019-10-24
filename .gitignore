@@ -4,8 +4,7 @@ vendor
 composer.lock
 .idea
 .env
-.env.test
-.env.example
+.env.*
 docs
 coverage
 .phpunit.result.cache

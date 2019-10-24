@@ -2,12 +2,16 @@
 
 namespace Santutu\LaravelDotEnv;
 
+use Webmozart\PathUtil\Path;
+
 class DotEnv
 {
     public $dotEnvFilePath;
     public $oldValue;
     public $newValue;
     public $key;
+    public $useAutoPrefix = true;
+    public $prefix = '.env';
 
     //key is must  small letter
     protected $conversionValueMap = [
@@ -16,10 +20,13 @@ class DotEnv
         'false' => false,
     ];
 
-    public function __construct(?string $dotEnvFilePath = null)
+    public function __construct(?string $envFilePath = null)
     {
-        if ($dotEnvFilePath !== null) {
-            $this->setDotEnvFile($dotEnvFilePath);
+        if ($envFilePath !== null) {
+            if ($this->useAutoPrefix) {
+                $envFilePath = $this->makePrefix($envFilePath);
+            }
+            $this->setDotEnvFile($envFilePath);
         }
     }
 
@@ -35,10 +42,11 @@ class DotEnv
     }
 
 
-    public function get(string $key): ?string
+    public function get(string $key, $default = null): ?string
     {
         $contents = file_get_contents($this->dotEnvFilePath);
-        return $this->reverseValue($this->getOldValueFromDotEnv($contents, $key));
+        $value = $this->reverseValue($this->getOldValueFromDotEnv($contents, $key));
+        return $value === null ? $default : $value;
     }
 
     /**
@@ -52,6 +60,8 @@ class DotEnv
      */
     public function set(string $key, ?string $value = null): bool
     {
+        $this->isValidKey($key);
+
         $this->assertDotEnvFilePath();
 
         $value = $this->conversionValue($value);
@@ -84,9 +94,28 @@ class DotEnv
         return null;
     }
 
-    public function copy(string $path = '.env.example', string $target = '.env')
+    public function use(string $envFilePath): bool
     {
-        return copy($path, $target);
+        if ($this->useAutoPrefix) {
+            $envFilePath = $this->makePrefix($envFilePath);
+        }
+        return $this->copy($envFilePath, '.env');
+    }
+
+
+    public function copy(string $path = '.env.example', string $target = '.env'): bool
+    {
+        if ($this->useAutoPrefix) {
+            $path = $this->makePrefix($path);
+        }
+
+        if (file_exists($target)) {
+            copy($target, '.env.temp');
+        }
+
+        $result = copy($path, $target);
+        $this->setDotEnvFile($target);
+        return $result;
     }
 
     public function getKey(): string
@@ -103,6 +132,22 @@ class DotEnv
     {
         return $this->reverseValue($this->newValue);
     }
+
+    public function setUseAutoPrefix(bool $useAutoPrefix)
+    {
+        $this->useAutoPrefix = $useAutoPrefix;
+        return $this;
+    }
+
+    protected function makePrefix(string $envFilePath): string
+    {
+        $fileName = Path::getFilename($envFilePath);
+        if (mb_strpos($fileName, '.env') !== 0) {
+            $fileName = '.env.' . $fileName;
+        }
+        return Path::join(Path::getDirectory($envFilePath), $fileName);
+    }
+
 
     /**
      * Overwrite the contents of a file.
@@ -127,13 +172,7 @@ class DotEnv
         return false;
     }
 
-    /**
-     * Get the old value of a given key from an environment file.
-     *
-     * @param string $content
-     * @param string $key
-     * @return string
-     */
+
     protected function getOldValueFromDotEnv(string $content, string $key): ?string
     {
         // Match the given key at the beginning of a line
@@ -149,6 +188,7 @@ class DotEnv
     protected function reverseValue(?string $key)
     {
         if (is_string($key)) {
+            $key = $this->stripDoubleQuotes($key);
             $mapKey = mb_strtolower($key);
             if (array_key_exists($mapKey, $this->conversionValueMap)) {
                 return $this->conversionValueMap[$mapKey];
@@ -159,6 +199,8 @@ class DotEnv
 
     protected function conversionValue(?string $val)
     {
+        if (is_string($val))
+            $val = $this->ensureContainSpaceValue($val);
 
         foreach ($this->conversionValueMap as $key => $value) {
             $key = mb_strtolower($key);
@@ -169,6 +211,21 @@ class DotEnv
         return $val;
     }
 
+    protected function ensureContainSpaceValue(string $val): string
+    {
+        if ((mb_strpos($val, ' ') !== false)) {
+            return '"' . $val . '"';
+        }
+        return $val;
+    }
+
+    protected function stripDoubleQuotes(string $val)
+    {
+        if (mb_strpos($val, '"') === 0 && mb_strrpos($val, '"') === mb_strlen($val) - 1) {
+            return mb_substr($val, 1, mb_strlen($val) - 2);
+        }
+        return $val;
+    }
 
     protected function getMatches(string $content, string $key)
     {
@@ -181,5 +238,19 @@ class DotEnv
         if (!isset($this->dotEnvFilePath)) {
             throw  new \Exception('need $this->dotEnvFile property');
         }
+
     }
+
+
+    protected function isValidKey(string $key): bool
+    {
+        if (mb_strpos($key, '=') !== false) {
+            throw new \Exception("Environment key should not contain '='");
+        }
+        if (!preg_match('/^[a-zA-Z_]+$/', $key)) {
+            throw new \Exception('Invalid environment key. Only use letters and underscores');
+        }
+        return true;
+    }
+
 }

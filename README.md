@@ -21,6 +21,7 @@ In Code
 In Console
 
 ```php
+php artisan env:use prod //copy .env.prod -> .env. if already exist backup to .env.temp
 php artisan env:set APP_NAME MY_APP_NAME  //default is .env
 php artisan env:get APP_NAME //MY_APP_NAME 
 php artisan env:delete APP_NAME //APP_NAME=MY_APP_NAME

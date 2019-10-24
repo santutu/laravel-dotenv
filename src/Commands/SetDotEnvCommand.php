@@ -66,29 +66,9 @@ class SetDotEnvCommand extends Command
         if (!isset($value)) {
             $value = '';
         }
-        if (!$this->isValidKey($key)) {
-            throw new InvalidArgumentException('Invalid argument key');
-        }
-        if (!is_bool(strpos($value, ' '))) {
-            $value = '"' . $value . '"';
-        }
+
         return [strtoupper($key), $value];
     }
 
-    /**
-     * Check if a given string is valid as an environment variable key.
-     *
-     * @param string $key
-     * @return boolean
-     */
-    protected function isValidKey(string $key): bool
-    {
-        if (mb_strpos($key, '=') !== false) {
-            throw new InvalidArgumentException("Environment key should not contain '='");
-        }
-        if (!preg_match('/^[a-zA-Z_]+$/', $key)) {
-            throw new InvalidArgumentException('Invalid environment key. Only use letters and underscores');
-        }
-        return true;
-    }
+
 }
