@@ -80,6 +80,12 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
             $dotEnv->set('TEST', mb_strtolower($key));
             $this->assertEquals($value, $dotEnv->get('TEST'));
         }
+
+        Artisan::call('env:set TEST false', [], new ConsoleOutput());
+        $this->assertFalse($dotEnv->get('TEST'));
+        Artisan::call('env:set TEST null', [], new ConsoleOutput());
+        $this->assertNull($dotEnv->get('TEST'));
+
         //
 
         if (file_exists($dotEnvFilePath)) {

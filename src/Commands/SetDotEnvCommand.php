@@ -47,9 +47,9 @@ class SetDotEnvCommand extends Command
 
         [$key, $value] = $this->getKeyValue();
         if ($dotEnv->set($key, $value)) {
-            $this->info("Environment variable with key '{$dotEnv->getKey()}' has been changed from '{$dotEnv->getOldValue()}' to '{$dotEnv->getNewValue()}'");
+            $this->info("Environment variable with key '{$dotEnv->getKey()}' has been changed from '{$dotEnv->getOldValue(false)}' to '{$dotEnv->getNewValue(false)}'");
         } else {
-            $this->info("A new environment variable with key '{$dotEnv->getKey()}' has been set to '{$dotEnv->getNewValue()}'");
+            $this->info("A new environment variable with key '{$dotEnv->getKey()}' has been set to '{$dotEnv->getNewValue(false)}'");
         }
     }
 

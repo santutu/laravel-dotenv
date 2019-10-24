@@ -42,10 +42,11 @@ class DotEnv
     }
 
 
-    public function get(string $key, $default = null): ?string
+    public function get(string $key, $default = null, bool $reverse = true)
     {
         $contents = file_get_contents($this->dotEnvFilePath);
-        $value = $this->reverseValue($this->getOldValueFromDotEnv($contents, $key));
+        $value = $this->getOldValueFromDotEnv($contents, $key);
+        $value = $reverse ? $this->reverseValue($value) : $value;
         return $value === null ? $default : $value;
     }
 
@@ -139,14 +140,14 @@ class DotEnv
         return $this->key;
     }
 
-    public function getOldValue(): ?string
+    public function getOldValue(bool $reverse = true)
     {
-        return $this->reverseValue($this->oldValue);
+        return $reverse ? $this->reverseValue($this->oldValue) : $this->oldValue;
     }
 
-    public function getNewValue(): ?string
+    public function getNewValue(bool $reverse = true)
     {
-        return $this->reverseValue($this->newValue);
+        return $reverse ? $this->reverseValue($this->newValue) : $this->newValue;
     }
 
     public function setUseAutoPrefix(bool $useAutoPrefix)
