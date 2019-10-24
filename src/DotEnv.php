@@ -96,17 +96,17 @@ class DotEnv
 
     public function use(string $envFilePath): self
     {
+        $this->assertDotEnvFilePath();
         if ($this->useAutoPrefix) {
             $envFilePath = $this->makePrefix($envFilePath);
         }
-        return $this->copy($envFilePath, '.env');
+        return $this->copy($envFilePath, $this->getDotEnvFilePath());
     }
-
 
     public function copy(string $path = '.env.example', ?string $target = null): self
     {
         if ($target === null) {
-            if ($this->getDotEnvFilePath() === null) throw new \Exception('dot env file path is null');
+            $this->assertDotEnvFilePath();
             $target = $this->getDotEnvFilePath();
         }
 
@@ -129,7 +129,8 @@ class DotEnv
         if ($target === null) {
             $target = $this;
         }
-        if ($target->getDotEnvFilePath() === null || $source->getDotEnvFilePath() === null) {
+        $this->assertDotEnvFilePath();
+        if ($source->getDotEnvFilePath() === null) {
             throw new \Exception('dot env file path is null');
         }
         $this->copy($source->getDotEnvFilePath(), $target->getDotEnvFilePath());
