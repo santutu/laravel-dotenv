@@ -47,7 +47,7 @@ class DeleteDotEnvCommand extends Command
 
         $keys = $this->argument('key');
         foreach ($keys as $key) {
-            $this->info($dotEnv->delete($key));
+            $this->info($dotEnv->delete($key). " in '{$dotEnvPath}'");
         }
 
     }

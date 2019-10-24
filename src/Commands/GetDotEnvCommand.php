@@ -46,7 +46,7 @@ class GetDotEnvCommand extends Command
 
         $keys = $this->argument('key');
         foreach ($keys as $key) {
-            $this->info($dotEnv->get($key));
+            $this->info($dotEnv->get($key). " in '{$dotEnvPath}'");
         }
 
     }
