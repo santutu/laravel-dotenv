@@ -218,7 +218,7 @@ class DotEnv
         return $key;
     }
 
-    public function convertValue(?string $val)
+    public function convertValue($val)
     {
         if (is_string($val))
             $val = $this->ensureContainSpaceValue($val);
