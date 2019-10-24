@@ -9,6 +9,13 @@ class DotEnv
     public $newValue;
     public $key;
 
+    //key is must  small letter
+    protected $conversionValueMap = [
+        'null' => null,
+        'true' => true,
+        'false' => false,
+    ];
+
     public function __construct(?string $dotEnvFilePath = null)
     {
         if ($dotEnvFilePath !== null) {
@@ -31,7 +38,7 @@ class DotEnv
     public function get(string $key): ?string
     {
         $contents = file_get_contents($this->dotEnvFilePath);
-        return $this->convertValue($this->getOldValueFromDotEnv($contents, $key));
+        return $this->reverseValue($this->getOldValueFromDotEnv($contents, $key));
     }
 
     /**
@@ -47,7 +54,7 @@ class DotEnv
     {
         $this->assertDotEnvFilePath();
 
-        if ($value === null) $value = 'null';
+        $value = $this->conversionValue($value);
         $this->key = $key;
         $this->newValue = $value;
 
@@ -89,12 +96,12 @@ class DotEnv
 
     public function getOldValue(): ?string
     {
-        return $this->convertValue($this->oldValue);
+        return $this->reverseValue($this->oldValue);
     }
 
     public function getNewValue(): ?string
     {
-        return $this->convertValue($this->newValue);
+        return $this->reverseValue($this->newValue);
     }
 
     /**
@@ -138,10 +145,30 @@ class DotEnv
         return null;
     }
 
-    protected function convertValue(?string $value)
+
+    protected function reverseValue(?string $key)
     {
-        return $value === 'null' ? null : $value;
+        if (is_string($key)) {
+            $mapKey = mb_strtolower($key);
+            if (array_key_exists($mapKey, $this->conversionValueMap)) {
+                return $this->conversionValueMap[$mapKey];
+            }
+        }
+        return $key;
     }
+
+    protected function conversionValue(?string $val)
+    {
+
+        foreach ($this->conversionValueMap as $key => $value) {
+            $key = mb_strtolower($key);
+            if ($value === $val) {
+                return $key;
+            }
+        }
+        return $val;
+    }
+
 
     protected function getMatches(string $content, string $key)
     {

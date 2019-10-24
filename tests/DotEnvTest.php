@@ -56,6 +56,31 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         $this->assertEquals(null, $dotEnv->delete('TEST'));;
         $this->assertNull($dotEnv->get('TEST'));
 
+        //conversions
+        $conversionMap = ['null' => null,
+            'true' => true,
+            'false' => false];
+        foreach ($conversionMap as $value) {
+            $dotEnv->set('TEST', $value);
+            $this->assertEquals($value, $dotEnv->get('TEST'));
+        }
+
+        foreach ($conversionMap as $key => $value) {
+            $dotEnv->set('TEST', $key);
+            $this->assertEquals($value, $dotEnv->get('TEST'));
+        }
+
+        foreach ($conversionMap as $key => $value) {
+            $dotEnv->set('TEST', mb_strtoupper($key));
+            $this->assertEquals($value, $dotEnv->get('TEST'));
+        }
+
+        foreach ($conversionMap as $key => $value) {
+            $dotEnv->set('TEST', mb_strtolower($key));
+            $this->assertEquals($value, $dotEnv->get('TEST'));
+        }
+        //
+
         if (file_exists($dotEnvFilePath)) {
             unlink($dotEnvFilePath);
         }
