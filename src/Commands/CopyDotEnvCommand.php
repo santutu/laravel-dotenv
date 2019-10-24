@@ -7,14 +7,14 @@ namespace Santutu\LaravelDotEnv\Commands;
 use Illuminate\Console\Command;
 use Santutu\LaravelDotEnv\DotEnv;
 
-class UseDotEnvCommand extends Command
+class CopyDotEnvCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'env:use {env}';
+    protected $signature = 'env:copy {env}';
 
     /**
      * The console command description.
@@ -49,8 +49,8 @@ class UseDotEnvCommand extends Command
             }
         }
 
-        if ($dotEnv->use($env, true)) {
-            $this->info("use {$env}");
+        if ($dotEnv->copy($env, true)) {
+            $this->info("copy {$env}");
         }
     }
 

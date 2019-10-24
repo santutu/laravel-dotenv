@@ -133,12 +133,12 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
 
         //use
         $prodDotEnv->set('TEST', 'PROD');
-        $dotEnv->use('prod');
+        $dotEnv->copy('prod');
         $this->assertEquals('PROD', $dotEnv->get('TEST'));
         $this->assertTrue(file_exists('.env.temp'));
 
         Artisan::call('env:set TEST null');
-//        Artisan::call('env:use prod');
+//        Artisan::call('env:copy prod');
 //        $this->assertEquals('PROD', $dotEnv->get('TEST'));
 
         //space

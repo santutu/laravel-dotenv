@@ -12,8 +12,8 @@ composer require santutu/laravel-dotenv
 
 __Facade__
 ```php
-\DotEnv::copy('.env.example','.env'); // Copy .env.example -> .env and load .env. if already exist, backup to .env.temp
-\DotEnv::use('.env.example') // is equels \DotEnv::copy('.env.example','.env');
+\DotEnv::copy('.env.example','.env'); // Copy .env.example->.env. if already exist, backup to .env.temp
+\DotEnv::copy('.env.example') // is equels \DotEnv::copy('.env.example','.env');
 \DotEnv::load('.env.example') // Not copy, just load '.env.example'
 
 \DotEnv::set('APP_NAME','MY_APP_NAME');
@@ -25,9 +25,9 @@ __Facade__
 __Instance__
 
 ```php
-$dotEnv= (new DotEnv)->copy('.env.example','.env')) // copy .env.example -> .env. if already exist, backup to .env.temp
+$dotEnv= (new DotEnv)->copy('.env.example','.env')) // copy .env.example->.env. if already exist, backup to .env.temp
+$dotEnv->copy('.env.prod') // copy .env.prod -> .env. if already exist, backup to .env.temp
 $dotEnv= new DotEnv('.env.dev') //load .env.dev. if not exist, create empty file.
-$dotEnv->use('.env.example') // copy .env.example -> .env.dev   
 $dotEnv->set('APP_NAME', 'name')
 $dotEnv->get('APP_NAME') //name
 $dotEnv->delete('APP_NAME')
@@ -37,15 +37,14 @@ $dotEnv->delete('APP_NAME')
 #### As alias
 ```php
 $devDotEnv = new DotEnv('dev'); // is equels new DotEnv('.env.dev'); 
-\DotEnv::copy('example','dev'); //is equels \DotEnv::copy('.env.example','.env.dev'); 
-\DotEnv::use('dev'); //is equels \DotEnv::use('.env.dev') 
+\DotEnv::copy('dev'); //is equels \DotEnv::copy('.env.dev') 
 ```
 
 
 #### In Console
 
 ```php
-php artisan env:use prod // if exist .env, Can be skipped.
+php artisan env:copy prod // if exist .env, Can be skipped.
 php artisan env:set APP_NAME MY_APP_NAME  //default is .env
 php artisan env:get APP_NAME //MY_APP_NAME 
 php artisan env:delete APP_NAME //APP_NAME=MY_APP_NAME
