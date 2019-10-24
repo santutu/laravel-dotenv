@@ -144,8 +144,13 @@ class DotEnv
     {
         $fileName = Path::getFilename($envFilePath);
         if (mb_strpos($fileName, '.env') !== 0) {
-            $fileName = '.env.' . $fileName;
+            $prefix = '.env';
+            if (mb_strpos($fileName, '.') !== 0) {
+                $prefix .= '.';
+            }
+            $fileName = $prefix . $fileName;
         }
+
         return Path::join(Path::getDirectory($envFilePath), $fileName);
     }
 

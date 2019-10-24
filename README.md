@@ -6,9 +6,9 @@
 composer require santutu/laravel-dotenv
 ```
 
-### Default Ussage.
+### Ussage.
 
-In Code
+#### In Code
 
 ```php
 \DotEnv::copy('.env.example','.env'); // if exist .env, Can be skipped.
@@ -18,7 +18,15 @@ In Code
 \DotEnv::delete('APP_NAME');
 ```
 
-In Console
+#### As alias
+```php
+$devDotEnv = new DotEnv('dev'); // is equels new DotEnv('.env.dev'); 
+\DotEnv::copy('example','dev'); //is equels \DotEnv::copy('.env.example','.env.dev'); 
+\DotEnv::use('dev'); //is equels \DotEnv::use('.env.dev') 
+```
+
+
+#### In Console
 
 ```php
 php artisan env:use prod //copy .env.prod -> .env. if already exist backup to .env.temp
@@ -27,34 +35,12 @@ php artisan env:get APP_NAME //MY_APP_NAME
 php artisan env:delete APP_NAME //APP_NAME=MY_APP_NAME
 ```
 
-Can set another .env file with --env argument in console 
+#### Can set another .env file with --env argument in console 
 
 ```php
 php artisan env:set APP_NAME MY_APP_NAME --env=.env.prod
 php artisan env:get APP_NAME --env=.env.prod //MY_APP_NAME 
 php artisan env:delete APP_NAME --env=.env.prod //APP_NAME=MY_APP_NAME
-```
-
-
-
-#### Load another .env in code
-
-```php
-$dotEnv= new DotEnv('.env.prod');
-```
-
-
-#### Create another .env in code
-
-```php
-$dotEnv= new DotEnv('.env.prod');
-```
-
-or
-
-```php
-$dotEnv= new DotEnv();
-$dotEnv->copy('.env.example','.env.prod');
 ```
 
 
