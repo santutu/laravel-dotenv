@@ -157,7 +157,7 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
 
         //copy by dotEnv
         $prodDotEnv->set('TEST', 'Asd');
-        $dotEnv->copyByDotEnv($prodDotEnv);
+        $dotEnv->copyByIns($prodDotEnv);
         $this->assertEquals($prodDotEnv->get('TEST'), $dotEnv->get('TEST'));
     }
 

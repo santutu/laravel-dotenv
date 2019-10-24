@@ -124,7 +124,7 @@ class DotEnv
         return $this;
     }
 
-    public function copyByDotEnv(DotEnv $source, ?DotEnv $target = null): self
+    public function copyByIns(DotEnv $source, ?DotEnv $target = null): self
     {
         if ($target === null) {
             $target = $this;
