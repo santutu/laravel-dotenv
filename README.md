@@ -1,12 +1,12 @@
 # laravel-dotenv
 
-### Installation
+## Installation
 
 ```bash
 composer require santutu/laravel-dotenv
 ```
 
-### Usage In Code
+## Usage In Code
 
 
 __Facade__
@@ -40,7 +40,7 @@ $devDotEnv = new DotEnv('dev'); // is equels new DotEnv('.env.dev');
 ```
 
 
-### Usage In Console
+## Usage In Console
 
 ```php
 php artisan env:copy prod // if exist .env, Can be skipped.
@@ -59,7 +59,7 @@ php artisan env:delete APP_NAME --env=.env.prod
 
 Also you can alias like --env=prod 
 
-### Testing
+## Testing
 
 ``` bash
 composer test
