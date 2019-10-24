@@ -40,9 +40,9 @@ class GetDotEnvCommand extends Command
      */
     public function handle()
     {
-        $dotEnv = resolve(DotEnv::class);
+
         $dotEnvPath = $this->option('env') ?? app()->environmentFilePath();
-        $dotEnv->load($dotEnvPath);
+        $dotEnv = new DotEnv($dotEnvPath);
 
         $keys = $this->argument('key');
         foreach ($keys as $key) {

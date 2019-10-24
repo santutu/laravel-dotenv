@@ -41,9 +41,8 @@ class SetDotEnvCommand extends Command
      */
     public function handle()
     {
-        $dotEnv = resolve(DotEnv::class);
         $dotEnvPath = $this->option('env') ?? app()->environmentFilePath();
-        $dotEnv->load($dotEnvPath);
+        $dotEnv = new DotEnv($dotEnvPath);
 
         [$key, $value] = $this->getKeyValue();
         if ($dotEnv->set($key, $value)) {
