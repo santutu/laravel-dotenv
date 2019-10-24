@@ -15,7 +15,7 @@ class SetDotEnvCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'env:set {key} {value?} {--env=}';
+    protected $signature = 'env:set {key} {value} {--env=}';
 
     /**
      * The console command description.
@@ -63,14 +63,7 @@ class SetDotEnvCommand extends Command
     {
         $key = $this->argument('key');
         $value = $this->argument('value');
-        if (!$value) {
-            $parts = explode('=', $key, 2);
-            if (count($parts) !== 2) {
-                throw new InvalidArgumentException('No value was set');
-            }
-            $key = $parts[0];
-            $value = $parts[1];
-        }
+
         if (!$this->isValidKey($key)) {
             throw new InvalidArgumentException('Invalid argument key');
         }
