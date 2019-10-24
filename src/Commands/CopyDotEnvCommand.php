@@ -40,9 +40,8 @@ class CopyDotEnvCommand extends Command
      */
     public function handle()
     {
-
         $env = $this->argument('env');
-        $dotEnv = new DotEnv($env);
+        $dotEnv = new DotEnv('.env');
 
         if (file_exists('.env')) {
             if (!$this->confirm('Already exist .env Do you force this command? (be backup as.env.temp)')) {
@@ -50,9 +49,8 @@ class CopyDotEnvCommand extends Command
             }
         }
 
-        if ($dotEnv->copy($env, true)) {
-            $this->info("copy {$env}");
-        }
+        $dotEnv->copy($env);
+        $this->info("copy {$env}->.env");
     }
 
 }
