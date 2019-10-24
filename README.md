@@ -25,9 +25,9 @@ __Facade__
 __Instance__
 
 ```php
-$dotEnv= (new DotEnv)->copy('.env.example','.env')) // copy .env.example->.env. if already exist, backup to .env.temp
+$dotEnv= (new DotEnv('.env'))->copy('.env.example')) // copy .env.example->.env. if already exist, backup to .env.temp
 $dotEnv->copy('.env.prod') // copy .env.prod -> .env. if already exist, backup to .env.temp
-$dotEnv= new DotEnv('.env.dev') //load .env.dev. if not exist, create empty file.
+$dotEnv->load('.env.dev') //load .env.dev. if not exist, create empty file.
 $dotEnv->set('APP_NAME', 'name')
 $dotEnv->get('APP_NAME') //name
 $dotEnv->delete('APP_NAME')
