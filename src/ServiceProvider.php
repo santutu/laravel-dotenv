@@ -12,7 +12,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->app->singleton(DotEnv::class, function () {
-            return (new DotEnv(app()->environmentFilePath()));
+            return (new DotEnv('.env'));
         });
     }
 
