@@ -11,7 +11,9 @@ composer require santutu/laravel-dotenv
 #### In Code
 
 ```php
-\DotEnv::copy('.env.example','.env'); // if exist .env, Can be skipped.
+\DotEnv::copy('.env.example','.env'); // copy .env.example -> .env. if already exist, backup to .env.temp
+\DotEnv::use('.env.example') // is Equels \DotEnv::copy('.env.example','.env');
+
 \DotEnv::set('APP_NAME','MY_APP_NAME');
 \DotEnv::getOldValue(); //Laravel
 \DotEnv::get('APP_NAME'); //MY_APP_NAME
@@ -29,7 +31,7 @@ $devDotEnv = new DotEnv('dev'); // is equels new DotEnv('.env.dev');
 #### In Console
 
 ```php
-php artisan env:use prod //copy .env.prod -> .env. if already exist backup to .env.temp
+php artisan env:use prod // if exist .env, Can be skipped.
 php artisan env:set APP_NAME MY_APP_NAME  //default is .env
 php artisan env:get APP_NAME //MY_APP_NAME 
 php artisan env:delete APP_NAME //APP_NAME=MY_APP_NAME
@@ -43,6 +45,7 @@ php artisan env:get APP_NAME --env=.env.prod //MY_APP_NAME
 php artisan env:delete APP_NAME --env=.env.prod //APP_NAME=MY_APP_NAME
 ```
 
+Also you can alias in --env like --env=prod 
 
 ### Testing
 
