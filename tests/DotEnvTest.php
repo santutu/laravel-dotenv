@@ -9,6 +9,7 @@ use Santutu\LaravelDotEnv\DotEnv;
 use Santutu\LaravelDotEnv\Facade;
 use Santutu\LaravelDotEnv\ServiceProvider;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Webmozart\PathUtil\Path;
 
 class DotEnvTest extends \Orchestra\Testbench\TestCase
 {
@@ -92,7 +93,8 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         }
         $dotEnv->copy('.env.example', $dotEnvFilePath);
         $dotEnv->copy('.env.example', $dotEnvFilePath);
-        $this->assertEquals($dotEnvFilePath, $dotEnv->dotEnvFilePath);
+        $this->assertEquals(Path::getDirectory($dotEnvFilePath),Path::getDirectory($dotEnv->dotEnvFilePath));
+        $this->assertEquals(Path::getFilename($dotEnvFilePath),Path::getFilename($dotEnv->dotEnvFilePath));
         $this->assertTrue(file_exists($dotEnvFilePath));
 
         //artisan set

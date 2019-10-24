@@ -107,6 +107,7 @@ class DotEnv
     {
         if ($this->useAutoPrefix) {
             $path = $this->makePrefix($path);
+            $target = $this->makePrefix($target);
         }
 
         if (file_exists($target)) {
