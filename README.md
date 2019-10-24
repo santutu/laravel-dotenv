@@ -12,7 +12,6 @@ composer require santutu/laravel-dotenv
 
 __Facade__
 ```php
-\DotEnv::copy('.env.example','.env'); // Copy .env.example->.env. if already exist, backup to .env.temp
 \DotEnv::copy('.env.example') // is equels \DotEnv::copy('.env.example','.env');
 \DotEnv::load('.env.example') // Not copy, just load '.env.example'
 
