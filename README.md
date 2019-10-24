@@ -45,7 +45,7 @@ php artisan env:get APP_NAME --env=.env.prod //MY_APP_NAME
 php artisan env:delete APP_NAME --env=.env.prod //APP_NAME=MY_APP_NAME
 ```
 
-Also you can alias in --env like --env=prod 
+Also you can alias like --env=prod 
 
 ### Testing
 
