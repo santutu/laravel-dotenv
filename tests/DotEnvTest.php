@@ -100,6 +100,9 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         $this->assertEquals('value', $dotEnv->get('TEST'));
         $this->assertEquals('value2', $dotEnv->get('TEST_T'));
 
+        Artisan::call('env:set TEST');
+        $this->assertEquals('', $dotEnv->get('TEST'));
+
         //artisan get
         Artisan::call('env:get TEST TEST_T', [], new ConsoleOutput());
 
