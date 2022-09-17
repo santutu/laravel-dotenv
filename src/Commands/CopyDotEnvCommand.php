@@ -14,7 +14,7 @@ class CopyDotEnvCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'env:copy {env}';
+    protected $signature = 'env:copy {env} {--force}';
 
     /**
      * The console command description.
@@ -43,7 +43,7 @@ class CopyDotEnvCommand extends Command
         $env = $this->argument('env');
         $dotEnv = new DotEnv('.env');
 
-        if (file_exists('.env')) {
+        if (file_exists('.env') && !$this->option('force')) {
             if (!$this->confirm('Already exist .env Do you force this command? (be backup as.env.temp)')) {
                 return false;
             }
