@@ -11,21 +11,20 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     public function register()
     {
-        app()->loadEnvironmentFrom('.env');
         $this->app->singleton(DotEnv::class, function () {
-            return new DotEnv(app()->environmentFilePath());
+            return new DotEnv($this->app->environment() === 'testing' ? '.env' : base_path('.env'));
         });
     }
 
     public function boot()
     {
-        if ($this->app->runningInConsole()) {
+        if ( $this->app->runningInConsole() ) {
             $this->commands([
-                SetDotEnvCommand::class,
-                GetDotEnvCommand::class,
-                DeleteDotEnvCommand::class,
-                CopyDotEnvCommand::class,
-            ]);
+                                SetDotEnvCommand::class,
+                                GetDotEnvCommand::class,
+                                DeleteDotEnvCommand::class,
+                                CopyDotEnvCommand::class,
+                            ]);
         }
 
     }

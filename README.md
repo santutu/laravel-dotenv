@@ -25,6 +25,9 @@ __Instance__
 ```php
 $dotEnv= (new DotEnv('.env'))->copy('.env.example')) // copy .env.example->.env. if already exist, backup to .env.temp
 $dotEnv->copy('.env.prod') // copy .env.prod -> .env. if already exist, backup to .env.temp
+$dotEnv->overwrite('.env.prod') // same as copy
+$dotEnv->changeTo('.env.prod') // same as copy
+
 $dotEnv->load('.env.dev') //load .env.dev. if not exist, create empty file.
 
 $dotEnv->set('APP_NAME', 'name')

@@ -121,8 +121,9 @@ class DotEnvTest extends \Orchestra\Testbench\TestCase
         $this->assertNull($dotEnv->get('TEST_T'));
 
         //facade
+        (new DotEnv)->copy('.env.example','.env');
         (new DotEnv)->copy('.env', 'prod');
-        $this->assertNull(\DotEnv::get('TESTAsd'));
+        $this->assertNull(\DotEnv::get('TEST'));
         $this->assertEquals('.env', \DotEnv::getDotEnvFilePath());
         //
         Artisan::call('env:set TEST value55 --env=.env.test', []);

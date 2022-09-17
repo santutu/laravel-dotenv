@@ -6,24 +6,24 @@ use Webmozart\PathUtil\Path;
 
 class DotEnv
 {
-    public $dotEnvFilePath;
+    public string $dotEnvFilePath;
     public $oldValue;
     public $newValue;
-    public $key;
-    public $useAutoPrefix = true;
-    public $prefix = '.env';
+    public string $key;
+    public bool $useAutoPrefix = true;
+    public string $prefix = '.env';
 
     //key is must  small letter
-    protected $conversionValueMap = [
-        'null' => null,
-        'true' => true,
+    protected array $conversionValueMap = [
+        'null'  => null,
+        'true'  => true,
         'false' => false,
     ];
 
     public function __construct(?string $envFilePath = null)
     {
-        if ($envFilePath !== null) {
-            if ($this->useAutoPrefix) {
+        if ( $envFilePath !== null ) {
+            if ( $this->useAutoPrefix ) {
                 $envFilePath = $this->makePrefix($envFilePath);
             }
             $this->load($envFilePath);
@@ -31,13 +31,14 @@ class DotEnv
     }
 
 
-    public function load(string $filePath)
+    public function load(string $endFilePath): static
     {
-        if (!file_exists($filePath)) {
-            $myfile = fopen($filePath, "w");
+
+        if ( !file_exists($endFilePath) ) {
+            $myfile = fopen($endFilePath, "w");
             fclose($myfile);
         }
-        $this->dotEnvFilePath = $filePath;
+        $this->dotEnvFilePath = $endFilePath;
         return $this;
     }
 
@@ -70,7 +71,7 @@ class DotEnv
         $this->newValue = $value;
 
         $contents = file_get_contents($this->dotEnvFilePath);
-        if ($this->hasKey($contents, $key)) {
+        if ( $this->hasKey($contents, $key) ) {
             $oldValue = $this->getOldValueFromDotEnv($contents, $key);
             $contents = str_replace("{$key}={$oldValue}", "{$key}={$value}", $contents);
             $this->writeFile($this->dotEnvFilePath, $contents);
@@ -87,7 +88,7 @@ class DotEnv
         $contents = file_get_contents($this->dotEnvFilePath);
         $matches = $this->getMatches($contents, $key);
 
-        if (count($matches)) {
+        if ( count($matches) ) {
             $contents = str_replace($matches[0], "", $contents);
             $this->writeFile($this->dotEnvFilePath, $contents);
             return $matches[0];
@@ -96,19 +97,19 @@ class DotEnv
     }
 
 
-    public function copy(string $path = '.env.example', ?string $target = null): self
+    public function copy(string $path = '.env.example', ?string $target = null): static
     {
-        if ($target === null) {
+        if ( $target === null ) {
             $this->assertDotEnvFilePath();
             $target = $this->getDotEnvFilePath();
         }
 
-        if ($this->useAutoPrefix) {
+        if ( $this->useAutoPrefix ) {
             $path = $this->makePrefix($path);
             $target = $this->makePrefix($target);
         }
 
-        if (file_exists($target)) {
+        if ( file_exists($target) ) {
             copy($target, '.env.temp');
         }
 
@@ -117,13 +118,23 @@ class DotEnv
         return $this;
     }
 
-    public function copyByIns(DotEnv $source, ?DotEnv $target = null): self
+    public function overwrite(string $path = '.env.example', ?string $target = null): static
     {
-        if ($target === null) {
+        return $this->copy($path, $target);
+    }
+
+    public function changeTo(string $path): static
+    {
+        return $this->copy($path);
+    }
+
+    public function copyByIns(DotEnv $source, ?DotEnv $target = null): static
+    {
+        if ( $target === null ) {
             $target = $this;
         }
         $this->assertDotEnvFilePath();
-        if ($source->getDotEnvFilePath() === null) {
+        if ( $source->getDotEnvFilePath() === null ) {
             throw new \Exception('dot env file path is null');
         }
         $this->copy($source->getDotEnvFilePath(), $target->getDotEnvFilePath());
@@ -159,9 +170,9 @@ class DotEnv
     protected function makePrefix(string $envFilePath): string
     {
         $fileName = Path::getFilename($envFilePath);
-        if (mb_strpos($fileName, '.env') !== 0) {
+        if ( mb_strpos($fileName, '.env') !== 0 ) {
             $prefix = '.env';
-            if (mb_strpos($fileName, '.') !== 0) {
+            if ( mb_strpos($fileName, '.') !== 0 ) {
                 $prefix .= '.';
             }
             $fileName = $prefix . $fileName;
@@ -188,7 +199,7 @@ class DotEnv
     protected function hasKey(string $content, string $key): bool
     {
         $matches = $this->getMatches($content, $key);
-        if (count($matches)) {
+        if ( count($matches) ) {
             return true;
         }
         return false;
@@ -199,7 +210,7 @@ class DotEnv
     {
         // Match the given key at the beginning of a line
         $matches = $this->getMatches($content, $key);
-        if (count($matches)) {
+        if ( count($matches) ) {
             $value = substr($matches[0], strlen($key) + 1);
             return $value;
         }
@@ -209,10 +220,10 @@ class DotEnv
 
     public function reverseValue(?string $key)
     {
-        if (is_string($key)) {
+        if ( is_string($key) ) {
             $key = $this->stripDoubleQuotes($key);
             $mapKey = mb_strtolower($key);
-            if (array_key_exists($mapKey, $this->conversionValueMap)) {
+            if ( array_key_exists($mapKey, $this->conversionValueMap) ) {
                 return $this->conversionValueMap[$mapKey];
             }
         }
@@ -221,12 +232,12 @@ class DotEnv
 
     public function convertValue($val)
     {
-        if (is_string($val))
+        if ( is_string($val) )
             $val = $this->ensureContainSpaceValue($val);
 
         foreach ($this->conversionValueMap as $key => $value) {
             $key = mb_strtolower($key);
-            if ($value === $val) {
+            if ( $value === $val ) {
                 return $key;
             }
         }
@@ -235,7 +246,7 @@ class DotEnv
 
     protected function ensureContainSpaceValue(string $val): string
     {
-        if ((mb_strpos($val, ' ') !== false)) {
+        if ( (mb_strpos($val, ' ') !== false) ) {
             return '"' . $val . '"';
         }
         return $val;
@@ -243,7 +254,7 @@ class DotEnv
 
     protected function stripDoubleQuotes(string $val)
     {
-        if (mb_strpos($val, '"') === 0 && mb_strrpos($val, '"') === mb_strlen($val) - 1) {
+        if ( mb_strpos($val, '"') === 0 && mb_strrpos($val, '"') === mb_strlen($val) - 1 ) {
             return mb_substr($val, 1, mb_strlen($val) - 2);
         }
         return $val;
@@ -257,7 +268,7 @@ class DotEnv
 
     private function assertDotEnvFilePath()
     {
-        if (!isset($this->dotEnvFilePath)) {
+        if ( !isset($this->dotEnvFilePath) ) {
             throw  new \Exception('need $this->dotEnvFile property');
         }
 
@@ -266,10 +277,10 @@ class DotEnv
 
     protected function isValidKey(string $key): bool
     {
-        if (mb_strpos($key, '=') !== false) {
+        if ( mb_strpos($key, '=') !== false ) {
             throw new \Exception("Environment key should not contain '='");
         }
-        if (!preg_match('/^[a-zA-Z_]+$/', $key)) {
+        if ( !preg_match('/^[a-zA-Z_]+$/', $key) ) {
             throw new \Exception('Invalid environment key. Only use letters and underscores');
         }
         return true;
