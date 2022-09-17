@@ -12,6 +12,7 @@ composer require santutu/laravel-dotenv
 __Facade__
 ```php
 \DotEnv::copy('.env.example') // is equels \DotEnv::copy('.env.example','.env');
+\DotEnv::overwrite('.env.example') // same as copy
 \DotEnv::load('.env.example') // Not copy, just load '.env.example'
 
 \DotEnv::set('APP_NAME','MY_APP_NAME');
@@ -26,7 +27,6 @@ __Instance__
 $dotEnv= (new DotEnv('.env'))->copy('.env.example')) // copy .env.example->.env. if already exist, backup to .env.temp
 $dotEnv->copy('.env.prod') // copy .env.prod -> .env. if already exist, backup to .env.temp
 $dotEnv->overwrite('.env.prod') // same as copy
-$dotEnv->changeTo('.env.prod') // same as copy
 
 $dotEnv->load('.env.dev') //load .env.dev. if not exist, create empty file.
 
